@@ -62,7 +62,7 @@ td{background:rgba(255,255,255,0.7);}
   background:white;
   border-radius:12px;
   border:1px solid #ddd;
-  max-height:200px;
+  max-height:220px;
   overflow-y:auto;
   display:none;
   z-index:999;
@@ -130,24 +130,26 @@ td{background:rgba(255,255,255,0.7);}
 </div>
 
 <script>
-let MASTER = {};
-let ITEMS = [];
+var MASTER = {};
+var ITEMS = [];
 
-/* ===== BACKEND LOAD (UNCHANGED) ===== */
+/* ===== LOAD MASTERS (UNCHANGED) ===== */
 async function loadMasters(){
-  const url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=masters";
-  const r = await fetch(url);
+  var url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=masters";
+  var r = await fetch(url);
   MASTER = await r.json();
 
-  MASTER.parties.forEach(p=>{
-    let o=document.createElement("option");
-    o.value=p.PartyID;o.textContent=p.PartyName;
+  MASTER.parties.forEach(function(p){
+    var o=document.createElement("option");
+    o.value=p.PartyID;
+    o.textContent=p.PartyName;
     partySelect.appendChild(o);
   });
 
-  MASTER.items.forEach(i=>{
-    let o=document.createElement("option");
-    o.value=i.ItemID;o.textContent=i.ItemName;
+  MASTER.items.forEach(function(i){
+    var o=document.createElement("option");
+    o.value=i.ItemID;
+    o.textContent=i.ItemName;
     itemSelect.appendChild(o);
   });
 
@@ -157,9 +159,10 @@ loadMasters();
 
 /* ===== ADD ITEM (UNCHANGED) ===== */
 function addItem(){
-  let it = MASTER.items.find(x=>x.ItemID==itemSelect.value);
-  let qty = parseFloat(itemQty.value||0);
-  let rate = parseFloat(itemRate.value||it.Rate||0);
+  var it = MASTER.items.find(function(x){ return x.ItemID==itemSelect.value; });
+  var qty = parseFloat(itemQty.value||0);
+  var rate = parseFloat(itemRate.value||it.Rate||0);
+
   ITEMS.push({
     ItemID:it.ItemID,
     ItemName:it.ItemName,
@@ -170,38 +173,46 @@ function addItem(){
   renderItems();
 }
 
-/* ===== RENDER (MODIFIED SAFELY) ===== */
+/* ===== RENDER ITEMS (SAFE) ===== */
 function renderItems(){
-  let tbody=document.querySelector("#itemsTable tbody");
-  tbody.innerHTML="";
-  ITEMS.forEach((r,i)=>{
-    let tr=document.createElement("tr");
+  var tbody = document.querySelector("#itemsTable tbody");
+  tbody.innerHTML = "";
+
+  for(var i=0;i<ITEMS.length;i++){
+    var r = ITEMS[i];
+    var tr = document.createElement("tr");
+
     tr.innerHTML =
-      "<td>"+r.ItemName+"</td>"+
-      "<td>"+r.Qty+"</td>"+
-      "<td>"+r.Rate+"</td>"+
-      "<td>"+r.Amount.toFixed(2)+"</td>"+
-      "<td>"+
-        "<button class='btn' onclick='duplicateItem("+i+")'>D</button> "+
-        "<button class='btn' onclick='editItem("+i+")'>E</button> "+
-        "<button class='btn red' onclick='delItem("+i+")'>X</button>"+
+      "<td>"+r.ItemName+"</td>" +
+      "<td>"+r.Qty+"</td>" +
+      "<td>"+r.Rate+"</td>" +
+      "<td>"+r.Amount.toFixed(2)+"</td>" +
+      "<td>" +
+        "<button class='btn' onclick='duplicateItem("+i+")'>D</button> " +
+        "<button class='btn' onclick='editItem("+i+")'>E</button> " +
+        "<button class='btn red' onclick='delItem("+i+")'>X</button>" +
       "</td>";
+
     tbody.appendChild(tr);
-  });
+  }
 }
 
 /* ===== ORIGINAL DELETE ===== */
-function delItem(i){ ITEMS.splice(i,1); renderItems(); }
-
-/* ===== NEW: DUPLICATE ===== */
-function duplicateItem(i){
-  ITEMS.push(JSON.parse(JSON.stringify(ITEMS[i])));
+function delItem(i){
+  ITEMS.splice(i,1);
   renderItems();
 }
 
-/* ===== NEW: EDIT ===== */
+/* ===== DUPLICATE ===== */
+function duplicateItem(i){
+  var copy = JSON.parse(JSON.stringify(ITEMS[i]));
+  ITEMS.push(copy);
+  renderItems();
+}
+
+/* ===== EDIT ===== */
 function editItem(i){
-  let r = ITEMS[i];
+  var r = ITEMS[i];
   itemSelect.value = r.ItemID;
   itemQty.value = r.Qty;
   itemRate.value = r.Rate;
@@ -209,20 +220,21 @@ function editItem(i){
   renderItems();
 }
 
-/* ===== BACKEND GENERATE (UNCHANGED) ===== */
+/* ===== GENERATE PI (UNCHANGED) ===== */
 async function generatePI(){
   if(ITEMS.length==0) return alert("Add at least one item");
 
-  let data = {
+  var data = {
     partyId: partySelect.value,
     items: ITEMS,
     extras: { contactNumber: contactNumber.value }
   };
 
-  let url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=generate&data="
+  var url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=generate&data="
             + encodeURIComponent(JSON.stringify(data));
-  let r = await fetch(url);
-  let res = await r.json();
+
+  var r = await fetch(url);
+  var res = await r.json();
 
   if(res.ok) window.open(res.pdfUrl);
   else alert(res.error);
@@ -230,25 +242,28 @@ async function generatePI(){
 
 /* ===== DROPDOWN LOGIC (UNCHANGED) ===== */
 function buildAllDropdownLists(){
-  document.querySelectorAll("select").forEach(sel=>{
-    let list=document.querySelector(".customDropdown[data-for='"+sel.id+"']");
+  document.querySelectorAll("select").forEach(function(sel){
+    var list=document.querySelector(".customDropdown[data-for='"+sel.id+"']");
     list.innerHTML="";
-    [...sel.options].forEach(op=>{
-      let d=document.createElement("div");
+    Array.from(sel.options).forEach(function(op){
+      var d=document.createElement("div");
       d.textContent=op.textContent;
-      d.onclick=function(){sel.value=op.value;list.style.display="none";};
+      d.onclick=function(){
+        sel.value=op.value;
+        list.style.display="none";
+      };
       list.appendChild(d);
     });
   });
 }
 
 function filterDropdown(input,id){
-  let sel=document.getElementById(id);
-  let list=document.querySelector(".customDropdown[data-for='"+id+"']");
+  var sel=document.getElementById(id);
+  var list=document.querySelector(".customDropdown[data-for='"+id+"']");
   list.innerHTML="";
-  [...sel.options].forEach(op=>{
+  Array.from(sel.options).forEach(function(op){
     if(op.textContent.toLowerCase().includes(input.value.toLowerCase())){
-      let d=document.createElement("div");
+      var d=document.createElement("div");
       d.textContent=op.textContent;
       d.onclick=function(){
         sel.value=op.value;
@@ -261,9 +276,11 @@ function filterDropdown(input,id){
   list.style.display="block";
 }
 
-document.addEventListener("click",e=>{
+document.addEventListener("click",function(e){
   if(!e.target.classList.contains("searchInput")){
-    document.querySelectorAll(".customDropdown").forEach(d=>d.style.display="none");
+    document.querySelectorAll(".customDropdown").forEach(function(d){
+      d.style.display="none";
+    });
   }
 });
 </script>
