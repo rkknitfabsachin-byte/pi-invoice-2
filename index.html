@@ -11,105 +11,90 @@ body{
   margin:0;
   background:linear-gradient(to bottom right,#dbeafe,#f8fafc);
   font-family:Inter,Arial;
-  animation:fadeIn .6s ease;
 }
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-
 .wrap{
-  max-width:900px;
-  margin:25px auto;
-  padding:15px;
+  max-width:1000px;
+  margin:20px auto;
+  padding:12px;
 }
 
 /* ===== GLASS CARD ===== */
 .card{
-  background:rgba(255,255,255,0.7);
+  background:rgba(255,255,255,0.75);
   backdrop-filter:blur(12px);
-  padding:22px;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.10);
-  margin-top:20px;
-  transition:.3s;
-}
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 15px 35px rgba(0,0,0,0.15);
+  padding:18px;
+  border-radius:18px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+  margin-top:18px;
 }
 
-h2{
-  font-size:26px;
-  font-weight:700;
-  text-align:center;
-  margin-bottom:20px;
-}
-h3{
-  font-size:18px;
-  margin-bottom:15px;
-}
+h2{text-align:center;margin-bottom:15px;}
+h3{margin-bottom:12px;}
 
 label{
-  font-size:14px;
+  font-size:13px;
   font-weight:600;
-  margin-top:15px;
+  margin-top:10px;
   display:block;
 }
 
 /* ===== INPUTS ===== */
 input,select{
   width:100%;
-  padding:12px;
-  margin-top:6px;
-  border-radius:12px;
+  padding:10px;
+  margin-top:5px;
+  border-radius:10px;
   border:1px solid #d1d5db;
-  background:rgba(255,255,255,0.8);
-  transition:.2s;
+  font-size:14px;
 }
-input:focus,select:focus{
-  border-color:#3b82f6;
+input:focus{
+  border-color:#2563eb;
   outline:none;
-  background:white;
 }
 
-/* ===== ROW FLEX ===== */
+/* ===== GRID ===== */
 .row{
-  display:flex;
-  gap:12px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
 }
-.col{flex:1;}
+.row.two{grid-template-columns:repeat(2,1fr);}
+@media(max-width:768px){
+  .row{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:480px){
+  .row{grid-template-columns:1fr;}
+}
 
 /* ===== TABLE ===== */
 table{
   width:100%;
-  margin-top:15px;
+  margin-top:12px;
   border-collapse:collapse;
-  backdrop-filter:blur(12px);
+  border-radius:14px;
   overflow:hidden;
-  border-radius:15px;
 }
 th{
   background:#e2e8f0;
-  padding:12px;
-  font-size:14px;
+  padding:10px;
+  font-size:13px;
 }
 td{
-  background:rgba(255,255,255,0.7);
-  padding:12px;
-}
-tr:hover td{
-  background:#f1f5f9;
+  background:#fff;
+  padding:10px;
+  font-size:13px;
+  text-align:center;
 }
 
 /* ===== BUTTONS ===== */
 .btn{
-  background:linear-gradient(to right,#2563eb,#4780ff);
+  background:linear-gradient(to right,#2563eb,#3b82f6);
   color:white;
-  padding:10px 14px;
+  padding:8px 12px;
   border:none;
-  border-radius:12px;
+  border-radius:10px;
   cursor:pointer;
-  margin-top:10px;
-  font-size:14px;
-  font-weight:600;
+  font-size:13px;
 }
 .btn.red{background:#dc2626;}
 
@@ -118,10 +103,10 @@ tr:hover td{
 .searchInput{
   width:100%;
   padding:10px;
-  border:1px solid #cbd5e1;
   border-radius:10px;
-  margin-bottom:6px;
+  border:1px solid #cbd5e1;
 }
+.searchBoxWrapper select{display:none;}
 .customDropdown{
   position:absolute;
   top:100%;
@@ -130,7 +115,7 @@ tr:hover td{
   background:white;
   border-radius:12px;
   border:1px solid #ddd;
-  max-height:220px;
+  max-height:200px;
   overflow-y:auto;
   display:none;
   z-index:999;
@@ -139,9 +124,7 @@ tr:hover td{
   padding:10px;
   cursor:pointer;
 }
-.customDropdown div:hover{
-  background:#e5f0ff;
-}
+.customDropdown div:hover{background:#e5f0ff;}
 </style>
 </head>
 
@@ -166,14 +149,16 @@ tr:hover td{
 <!-- PI DETAILS -->
 <div class="card">
 <h3>PI Details</h3>
-<label>PO Number</label><input id="poNumber">
-<label>CRM</label><input id="crm">
-<label>Priority</label><input id="priority">
-<label>Shade Reference</label><input id="shadeRef">
-<label>Lot Number</label><input id="lotNo">
-<label>Delivery Date</label><input type="date" id="deliveryDate">
-<label>Payment Terms</label><input id="paymentTerms">
-<label>Notes</label><input id="notes">
+<div class="row two">
+  <div><label>PO Number</label><input id="poNumber"></div>
+  <div><label>CRM</label><input id="crm"></div>
+  <div><label>Priority</label><input id="priority"></div>
+  <div><label>Shade Reference</label><input id="shadeRef"></div>
+  <div><label>Lot Number</label><input id="lotNo"></div>
+  <div><label>Delivery Date</label><input type="date" id="deliveryDate"></div>
+  <div><label>Payment Terms</label><input id="paymentTerms"></div>
+  <div><label>Notes</label><input id="notes"></div>
+</div>
 </div>
 
 <!-- ITEMS -->
@@ -181,46 +166,38 @@ tr:hover td{
 <h3>Add Items</h3>
 
 <div class="row">
-<div class="col">
-<label>Item</label>
-<div class="searchBoxWrapper">
-<input class="searchInput" placeholder="Search item..." oninput="filterDropdown(this,'itemSelect')">
-<select id="itemSelect"></select>
-<div class="customDropdown" data-for="itemSelect"></div>
-</div>
+  <div>
+    <label>Item</label>
+    <div class="searchBoxWrapper">
+      <input class="searchInput" placeholder="Search item..." oninput="filterDropdown(this,'itemSelect')">
+      <select id="itemSelect"></select>
+      <div class="customDropdown" data-for="itemSelect"></div>
+    </div>
+  </div>
+
+  <div>
+    <label>Color</label>
+    <div class="searchBoxWrapper">
+      <input class="searchInput" placeholder="Search color..." oninput="filterDropdown(this,'itemColor')">
+      <select id="itemColor"></select>
+      <div class="customDropdown" data-for="itemColor"></div>
+    </div>
+  </div>
+
+  <div>
+    <label>GSM</label>
+    <input id="itemGSM" placeholder="Enter GSM">
+  </div>
+
+  <div>
+    <label>DIA</label>
+    <input id="itemDIA" placeholder="Enter DIA">
+  </div>
 </div>
 
-<div class="col">
-<label>Color</label>
-<div class="searchBoxWrapper">
-<input class="searchInput" placeholder="Search color..." oninput="filterDropdown(this,'itemColor')">
-<select id="itemColor"></select>
-<div class="customDropdown" data-for="itemColor"></div>
-</div>
-</div>
-
-<div class="col">
-<label>GSM</label>
-<div class="searchBoxWrapper">
-<input class="searchInput" placeholder="Search GSM..." oninput="filterDropdown(this,'itemGSM')">
-<select id="itemGSM"></select>
-<div class="customDropdown" data-for="itemGSM"></div>
-</div>
-</div>
-
-<div class="col">
-<label>DIA</label>
-<div class="searchBoxWrapper">
-<input class="searchInput" placeholder="Search DIA..." oninput="filterDropdown(this,'itemDIA')">
-<select id="itemDIA"></select>
-<div class="customDropdown" data-for="itemDIA"></div>
-</div>
-</div>
-</div>
-
-<div class="row">
-<div class="col"><label>Qty</label><input id="itemQty" type="number"></div>
-<div class="col"><label>Rate</label><input id="itemRate" type="number"></div>
+<div class="row two">
+  <div><label>Qty</label><input id="itemQty" type="number"></div>
+  <div><label>Rate</label><input id="itemRate" type="number"></div>
 </div>
 
 <button class="btn" onclick="addItem()">Add Item</button>
@@ -229,7 +206,7 @@ tr:hover td{
 <thead>
 <tr>
 <th>Item</th><th>Color</th><th>GSM</th><th>DIA</th>
-<th>Qty</th><th>Rate</th><th>Amount</th><th></th>
+<th>Qty</th><th>Rate</th><th>Amount</th><th>Action</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -240,50 +217,30 @@ tr:hover td{
 </div>
 
 <script>
-let MASTER = {};
-let ITEMS = [];
+let MASTER={}, ITEMS=[];
 
-/* ===== LOAD MASTERS (ORIGINAL) ===== */
 async function loadMasters(){
-  const url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=masters";
-  const r = await fetch(url);
-  MASTER = await r.json();
+  const url="https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=masters";
+  const r=await fetch(url);
+  MASTER=await r.json();
 
   MASTER.parties.forEach(p=>{
-    let o=document.createElement("option");
-    o.value=p.PartyID;
-    o.textContent=p.PartyName;
-    partySelect.appendChild(o);
+    partySelect.add(new Option(p.PartyName,p.PartyID));
   });
-
   MASTER.items.forEach(i=>{
-    let o=document.createElement("option");
-    o.value=i.ItemID;
-    o.textContent=i.ItemName;
-    itemSelect.appendChild(o);
+    itemSelect.add(new Option(i.ItemName,i.ItemID));
   });
-
-  fillDropdown("itemColor", MASTER.items.map(i=>i.Color).filter(Boolean));
-  fillDropdown("itemGSM", MASTER.items.map(i=>i.GSM).filter(Boolean));
-  fillDropdown("itemDIA", MASTER.items.map(i=>i.DIA).filter(Boolean));
-
+  [...new Set(MASTER.items.map(i=>i.Color).filter(Boolean))].forEach(c=>{
+    itemColor.add(new Option(c,c));
+  });
   buildAllDropdownLists();
 }
 loadMasters();
 
-function fillDropdown(id,arr){
-  [...new Set(arr)].forEach(v=>{
-    let o=document.createElement("option");
-    o.value=v;o.textContent=v;
-    document.getElementById(id).appendChild(o);
-  });
-}
-
-/* ===== ADD ITEM (ORIGINAL) ===== */
 function addItem(){
-  let it = MASTER.items.find(x=>x.ItemID==itemSelect.value);
-  let qty=parseFloat(itemQty.value||0);
-  let rate=parseFloat(itemRate.value||it.Rate||0);
+  let it=MASTER.items.find(x=>x.ItemID==itemSelect.value);
+  let qty=+itemQty.value||0;
+  let rate=+itemRate.value||it.Rate||0;
   ITEMS.push({
     ItemID:it.ItemID,
     ItemName:it.ItemName,
@@ -297,13 +254,12 @@ function addItem(){
   renderItems();
 }
 
-/* ===== RENDER ITEMS (SAFE PATCH) ===== */
 function renderItems(){
-  let tbody=document.querySelector("#itemsTable tbody");
-  tbody.innerHTML="";
+  let tb=itemsTable.tBodies[0];
+  tb.innerHTML="";
   ITEMS.forEach((r,i)=>{
-    let tr=document.createElement("tr");
-    tr.innerHTML=
+    tb.insertAdjacentHTML("beforeend",
+      "<tr>"+
       "<td>"+r.ItemName+"</td>"+
       "<td>"+r.Color+"</td>"+
       "<td>"+r.GSM+"</td>"+
@@ -312,19 +268,15 @@ function renderItems(){
       "<td>"+r.Rate+"</td>"+
       "<td>"+r.Amount.toFixed(2)+"</td>"+
       "<td>"+
-        "<button class='btn' onclick='duplicateItem("+i+")'>D</button> "+
-        "<button class='btn' onclick='editItem("+i+")'>E</button> "+
-        "<button class='btn red' onclick='delItem("+i+")'>X</button>"+
-      "</td>";
-    tbody.appendChild(tr);
+      "<button class='btn' onclick='duplicateItem("+i+")'>D</button> "+
+      "<button class='btn' onclick='editItem("+i+")'>E</button> "+
+      "<button class='btn red' onclick='delItem("+i+")'>X</button>"+
+      "</td></tr>");
   });
 }
 
 function delItem(i){ITEMS.splice(i,1);renderItems();}
-function duplicateItem(i){
-  ITEMS.push(JSON.parse(JSON.stringify(ITEMS[i])));
-  renderItems();
-}
+function duplicateItem(i){ITEMS.push({...ITEMS[i]});renderItems();}
 function editItem(i){
   let r=ITEMS[i];
   itemSelect.value=r.ItemID;
@@ -337,7 +289,6 @@ function editItem(i){
   renderItems();
 }
 
-/* ===== GENERATE PI (ORIGINAL) ===== */
 async function generatePI(){
   if(!ITEMS.length) return alert("Add at least one item");
   let data={
@@ -358,11 +309,10 @@ async function generatePI(){
   let url="https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=generate&data="+encodeURIComponent(JSON.stringify(data));
   let r=await fetch(url);
   let res=await r.json();
-  if(res.ok) window.open(res.pdfUrl);
-  else alert(res.error);
+  if(res.ok) window.open(res.pdfUrl); else alert(res.error);
 }
 
-/* ===== DROPDOWN LOGIC (ORIGINAL) ===== */
+/* DROPDOWN LOGIC */
 function buildAllDropdownLists(){
   document.querySelectorAll("select").forEach(sel=>{
     let list=document.querySelector(".customDropdown[data-for='"+sel.id+"']");
@@ -370,12 +320,11 @@ function buildAllDropdownLists(){
     [...sel.options].forEach(op=>{
       let d=document.createElement("div");
       d.textContent=op.textContent;
-      d.onclick=()=>{sel.value=op.value;list.style.display="none";};
+      d.onclick=()=>{sel.value=op.value;event.target.closest(".customDropdown").style.display="none";};
       list.appendChild(d);
     });
   });
 }
-
 function filterDropdown(input,id){
   let sel=document.getElementById(id);
   let list=document.querySelector(".customDropdown[data-for='"+id+"']");
@@ -390,7 +339,6 @@ function filterDropdown(input,id){
   });
   list.style.display="block";
 }
-
 document.addEventListener("click",e=>{
   if(!e.target.classList.contains("searchInput")){
     document.querySelectorAll(".customDropdown").forEach(d=>d.style.display="none");
