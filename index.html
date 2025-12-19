@@ -6,12 +6,22 @@
 <title>Proforma Invoice</title>
 
 <style>
+/* ===== GLOBAL ===== */
 body{
   margin:0;
   background:linear-gradient(to bottom right,#dbeafe,#f8fafc);
   font-family:Inter,Arial;
+  animation:fadeIn .6s ease;
 }
-.wrap{max-width:900px;margin:25px auto;padding:15px;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+.wrap{
+  max-width:900px;
+  margin:25px auto;
+  padding:15px;
+}
+
+/* ===== GLASS CARD ===== */
 .card{
   background:rgba(255,255,255,0.7);
   backdrop-filter:blur(12px);
@@ -19,33 +29,91 @@ body{
   border-radius:20px;
   box-shadow:0 10px 30px rgba(0,0,0,0.10);
   margin-top:20px;
+  transition:.3s;
 }
-h2{text-align:center;margin-bottom:20px;}
-h3{margin-bottom:15px;}
-label{font-size:14px;font-weight:600;margin-top:15px;display:block;}
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+
+h2{
+  font-size:26px;
+  font-weight:700;
+  text-align:center;
+  margin-bottom:20px;
+}
+h3{
+  font-size:18px;
+  margin-bottom:15px;
+}
+
+label{
+  font-size:14px;
+  font-weight:600;
+  margin-top:15px;
+  display:block;
+}
+
+/* ===== INPUTS ===== */
 input,select{
   width:100%;
   padding:12px;
   margin-top:6px;
   border-radius:12px;
   border:1px solid #d1d5db;
+  background:rgba(255,255,255,0.8);
+  transition:.2s;
 }
-.row{display:flex;gap:12px;}
+input:focus,select:focus{
+  border-color:#3b82f6;
+  outline:none;
+  background:white;
+}
+
+/* ===== ROW FLEX ===== */
+.row{
+  display:flex;
+  gap:12px;
+}
 .col{flex:1;}
-table{width:100%;margin-top:15px;border-collapse:collapse;}
-th,td{padding:12px;}
-th{background:#e2e8f0;}
-td{background:rgba(255,255,255,0.7);}
+
+/* ===== TABLE ===== */
+table{
+  width:100%;
+  margin-top:15px;
+  border-collapse:collapse;
+  backdrop-filter:blur(12px);
+  overflow:hidden;
+  border-radius:15px;
+}
+th{
+  background:#e2e8f0;
+  padding:12px;
+  font-size:14px;
+}
+td{
+  background:rgba(255,255,255,0.7);
+  padding:12px;
+}
+tr:hover td{
+  background:#f1f5f9;
+}
+
+/* ===== BUTTONS ===== */
 .btn{
-  background:#2563eb;
+  background:linear-gradient(to right,#2563eb,#4780ff);
   color:white;
-  padding:8px 12px;
+  padding:10px 14px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   cursor:pointer;
+  margin-top:10px;
+  font-size:14px;
+  font-weight:600;
 }
 .btn.red{background:#dc2626;}
 
+/* ===== SEARCHABLE DROPDOWN ===== */
 .searchBoxWrapper{position:relative;}
 .searchInput{
   width:100%;
@@ -67,8 +135,13 @@ td{background:rgba(255,255,255,0.7);}
   display:none;
   z-index:999;
 }
-.customDropdown div{padding:10px;cursor:pointer;}
-.customDropdown div:hover{background:#e5f0ff;}
+.customDropdown div{
+  padding:10px;
+  cursor:pointer;
+}
+.customDropdown div:hover{
+  background:#e5f0ff;
+}
 </style>
 </head>
 
@@ -85,8 +158,22 @@ td{background:rgba(255,255,255,0.7);}
 <select id="partySelect"></select>
 <div class="customDropdown" data-for="partySelect"></div>
 </div>
+
 <label>Contact Number</label>
 <input id="contactNumber">
+</div>
+
+<!-- PI DETAILS -->
+<div class="card">
+<h3>PI Details</h3>
+<label>PO Number</label><input id="poNumber">
+<label>CRM</label><input id="crm">
+<label>Priority</label><input id="priority">
+<label>Shade Reference</label><input id="shadeRef">
+<label>Lot Number</label><input id="lotNo">
+<label>Delivery Date</label><input type="date" id="deliveryDate">
+<label>Payment Terms</label><input id="paymentTerms">
+<label>Notes</label><input id="notes">
 </div>
 
 <!-- ITEMS -->
@@ -104,14 +191,36 @@ td{background:rgba(255,255,255,0.7);}
 </div>
 
 <div class="col">
-<label>Qty</label>
-<input id="itemQty" type="number">
+<label>Color</label>
+<div class="searchBoxWrapper">
+<input class="searchInput" placeholder="Search color..." oninput="filterDropdown(this,'itemColor')">
+<select id="itemColor"></select>
+<div class="customDropdown" data-for="itemColor"></div>
+</div>
 </div>
 
 <div class="col">
-<label>Rate</label>
-<input id="itemRate" type="number">
+<label>GSM</label>
+<div class="searchBoxWrapper">
+<input class="searchInput" placeholder="Search GSM..." oninput="filterDropdown(this,'itemGSM')">
+<select id="itemGSM"></select>
+<div class="customDropdown" data-for="itemGSM"></div>
 </div>
+</div>
+
+<div class="col">
+<label>DIA</label>
+<div class="searchBoxWrapper">
+<input class="searchInput" placeholder="Search DIA..." oninput="filterDropdown(this,'itemDIA')">
+<select id="itemDIA"></select>
+<div class="customDropdown" data-for="itemDIA"></div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col"><label>Qty</label><input id="itemQty" type="number"></div>
+<div class="col"><label>Rate</label><input id="itemRate" type="number"></div>
 </div>
 
 <button class="btn" onclick="addItem()">Add Item</button>
@@ -119,7 +228,8 @@ td{background:rgba(255,255,255,0.7);}
 <table id="itemsTable">
 <thead>
 <tr>
-<th>Item</th><th>Qty</th><th>Rate</th><th>Amount</th><th>Actions</th>
+<th>Item</th><th>Color</th><th>GSM</th><th>DIA</th>
+<th>Qty</th><th>Rate</th><th>Amount</th><th></th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -130,42 +240,56 @@ td{background:rgba(255,255,255,0.7);}
 </div>
 
 <script>
-var MASTER = {};
-var ITEMS = [];
+let MASTER = {};
+let ITEMS = [];
 
-/* ===== LOAD MASTERS (UNCHANGED) ===== */
+/* ===== LOAD MASTERS (ORIGINAL) ===== */
 async function loadMasters(){
-  var url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=masters";
-  var r = await fetch(url);
+  const url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=masters";
+  const r = await fetch(url);
   MASTER = await r.json();
 
-  MASTER.parties.forEach(function(p){
-    var o=document.createElement("option");
+  MASTER.parties.forEach(p=>{
+    let o=document.createElement("option");
     o.value=p.PartyID;
     o.textContent=p.PartyName;
     partySelect.appendChild(o);
   });
 
-  MASTER.items.forEach(function(i){
-    var o=document.createElement("option");
+  MASTER.items.forEach(i=>{
+    let o=document.createElement("option");
     o.value=i.ItemID;
     o.textContent=i.ItemName;
     itemSelect.appendChild(o);
   });
 
+  fillDropdown("itemColor", MASTER.items.map(i=>i.Color).filter(Boolean));
+  fillDropdown("itemGSM", MASTER.items.map(i=>i.GSM).filter(Boolean));
+  fillDropdown("itemDIA", MASTER.items.map(i=>i.DIA).filter(Boolean));
+
   buildAllDropdownLists();
 }
 loadMasters();
 
-/* ===== ADD ITEM (UNCHANGED) ===== */
-function addItem(){
-  var it = MASTER.items.find(function(x){ return x.ItemID==itemSelect.value; });
-  var qty = parseFloat(itemQty.value||0);
-  var rate = parseFloat(itemRate.value||it.Rate||0);
+function fillDropdown(id,arr){
+  [...new Set(arr)].forEach(v=>{
+    let o=document.createElement("option");
+    o.value=v;o.textContent=v;
+    document.getElementById(id).appendChild(o);
+  });
+}
 
+/* ===== ADD ITEM (ORIGINAL) ===== */
+function addItem(){
+  let it = MASTER.items.find(x=>x.ItemID==itemSelect.value);
+  let qty=parseFloat(itemQty.value||0);
+  let rate=parseFloat(itemRate.value||it.Rate||0);
   ITEMS.push({
     ItemID:it.ItemID,
     ItemName:it.ItemName,
+    Color:itemColor.value,
+    GSM:itemGSM.value,
+    DIA:itemDIA.value,
     Qty:qty,
     Rate:rate,
     Amount:qty*rate
@@ -173,114 +297,103 @@ function addItem(){
   renderItems();
 }
 
-/* ===== RENDER ITEMS (SAFE) ===== */
+/* ===== RENDER ITEMS (SAFE PATCH) ===== */
 function renderItems(){
-  var tbody = document.querySelector("#itemsTable tbody");
-  tbody.innerHTML = "";
-
-  for(var i=0;i<ITEMS.length;i++){
-    var r = ITEMS[i];
-    var tr = document.createElement("tr");
-
-    tr.innerHTML =
-      "<td>"+r.ItemName+"</td>" +
-      "<td>"+r.Qty+"</td>" +
-      "<td>"+r.Rate+"</td>" +
-      "<td>"+r.Amount.toFixed(2)+"</td>" +
-      "<td>" +
-        "<button class='btn' onclick='duplicateItem("+i+")'>D</button> " +
-        "<button class='btn' onclick='editItem("+i+")'>E</button> " +
-        "<button class='btn red' onclick='delItem("+i+")'>X</button>" +
+  let tbody=document.querySelector("#itemsTable tbody");
+  tbody.innerHTML="";
+  ITEMS.forEach((r,i)=>{
+    let tr=document.createElement("tr");
+    tr.innerHTML=
+      "<td>"+r.ItemName+"</td>"+
+      "<td>"+r.Color+"</td>"+
+      "<td>"+r.GSM+"</td>"+
+      "<td>"+r.DIA+"</td>"+
+      "<td>"+r.Qty+"</td>"+
+      "<td>"+r.Rate+"</td>"+
+      "<td>"+r.Amount.toFixed(2)+"</td>"+
+      "<td>"+
+        "<button class='btn' onclick='duplicateItem("+i+")'>D</button> "+
+        "<button class='btn' onclick='editItem("+i+")'>E</button> "+
+        "<button class='btn red' onclick='delItem("+i+")'>X</button>"+
       "</td>";
-
     tbody.appendChild(tr);
-  }
+  });
 }
 
-/* ===== ORIGINAL DELETE ===== */
-function delItem(i){
-  ITEMS.splice(i,1);
-  renderItems();
-}
-
-/* ===== DUPLICATE ===== */
+function delItem(i){ITEMS.splice(i,1);renderItems();}
 function duplicateItem(i){
-  var copy = JSON.parse(JSON.stringify(ITEMS[i]));
-  ITEMS.push(copy);
+  ITEMS.push(JSON.parse(JSON.stringify(ITEMS[i])));
   renderItems();
 }
-
-/* ===== EDIT ===== */
 function editItem(i){
-  var r = ITEMS[i];
-  itemSelect.value = r.ItemID;
-  itemQty.value = r.Qty;
-  itemRate.value = r.Rate;
+  let r=ITEMS[i];
+  itemSelect.value=r.ItemID;
+  itemColor.value=r.Color;
+  itemGSM.value=r.GSM;
+  itemDIA.value=r.DIA;
+  itemQty.value=r.Qty;
+  itemRate.value=r.Rate;
   ITEMS.splice(i,1);
   renderItems();
 }
 
-/* ===== GENERATE PI (UNCHANGED) ===== */
+/* ===== GENERATE PI (ORIGINAL) ===== */
 async function generatePI(){
-  if(ITEMS.length==0) return alert("Add at least one item");
-
-  var data = {
-    partyId: partySelect.value,
-    items: ITEMS,
-    extras: { contactNumber: contactNumber.value }
+  if(!ITEMS.length) return alert("Add at least one item");
+  let data={
+    partyId:partySelect.value,
+    items:ITEMS,
+    extras:{
+      poNumber:poNumber.value,
+      contactNumber:contactNumber.value,
+      crm:crm.value,
+      priority:priority.value,
+      shadeRef:shadeRef.value,
+      lotNo:lotNo.value,
+      deliveryDate:deliveryDate.value,
+      paymentTerms:paymentTerms.value,
+      notes:notes.value
+    }
   };
-
-  var url = "https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=generate&data="
-            + encodeURIComponent(JSON.stringify(data));
-
-  var r = await fetch(url);
-  var res = await r.json();
-
+  let url="https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=generate&data="+encodeURIComponent(JSON.stringify(data));
+  let r=await fetch(url);
+  let res=await r.json();
   if(res.ok) window.open(res.pdfUrl);
   else alert(res.error);
 }
 
-/* ===== DROPDOWN LOGIC (UNCHANGED) ===== */
+/* ===== DROPDOWN LOGIC (ORIGINAL) ===== */
 function buildAllDropdownLists(){
-  document.querySelectorAll("select").forEach(function(sel){
-    var list=document.querySelector(".customDropdown[data-for='"+sel.id+"']");
+  document.querySelectorAll("select").forEach(sel=>{
+    let list=document.querySelector(".customDropdown[data-for='"+sel.id+"']");
     list.innerHTML="";
-    Array.from(sel.options).forEach(function(op){
-      var d=document.createElement("div");
+    [...sel.options].forEach(op=>{
+      let d=document.createElement("div");
       d.textContent=op.textContent;
-      d.onclick=function(){
-        sel.value=op.value;
-        list.style.display="none";
-      };
+      d.onclick=()=>{sel.value=op.value;list.style.display="none";};
       list.appendChild(d);
     });
   });
 }
 
 function filterDropdown(input,id){
-  var sel=document.getElementById(id);
-  var list=document.querySelector(".customDropdown[data-for='"+id+"']");
+  let sel=document.getElementById(id);
+  let list=document.querySelector(".customDropdown[data-for='"+id+"']");
   list.innerHTML="";
-  Array.from(sel.options).forEach(function(op){
+  [...sel.options].forEach(op=>{
     if(op.textContent.toLowerCase().includes(input.value.toLowerCase())){
-      var d=document.createElement("div");
+      let d=document.createElement("div");
       d.textContent=op.textContent;
-      d.onclick=function(){
-        sel.value=op.value;
-        input.value=op.textContent;
-        list.style.display="none";
-      };
+      d.onclick=()=>{sel.value=op.value;input.value=op.textContent;list.style.display="none";};
       list.appendChild(d);
     }
   });
   list.style.display="block";
 }
 
-document.addEventListener("click",function(e){
+document.addEventListener("click",e=>{
   if(!e.target.classList.contains("searchInput")){
-    document.querySelectorAll(".customDropdown").forEach(function(d){
-      d.style.display="none";
-    });
+    document.querySelectorAll(".customDropdown").forEach(d=>d.style.display="none");
   }
 });
 </script>
