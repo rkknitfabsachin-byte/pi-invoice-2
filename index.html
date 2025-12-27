@@ -308,16 +308,19 @@ async function generatePI(){
     partyId:partySelect.value,
     items:ITEMS,
     extras:{
-      poNumber:poNumber.value,
-      contactNumber:contactNumber.value,
-      crm:crm.value,
-      priority:priority.value,
-      shadeRef:shadeRef.value,
-      lotNo:lotNo.value,
-      deliveryDate:deliveryDate.value,
-      paymentTerms:paymentTerms.value,
-      notes:notes.value
-    }
+  poNumber: poNumber.value,
+  contactNumber: contactNumber.value,
+  crm: crm.value,
+  priority: priority.value,
+  shadeRef: shadeRef.value,
+  lotNo: lotNo.value,
+  deliveryDate: deliveryDate.value,
+
+  orderedDate: orderedDate.value || "",   // ✅ ADD THIS LINE
+
+  paymentTerms: paymentTerms.value,
+  notes: notes.value
+}
   };
   let url="https://script.google.com/macros/s/AKfycbxJgQOV2Ip19EpFJltnOAFaaGD1GX2iPub850ie0H4_fAF5fL35nFBcXuCC9-f0q5Lnxw/exec?action=generate&data="+encodeURIComponent(JSON.stringify(data));
   let r=await fetch(url);
