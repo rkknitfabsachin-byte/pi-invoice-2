@@ -156,6 +156,10 @@ td{
   <div><label>Shade Reference</label><input id="shadeRef"></div>
   <div><label>Lot Number</label><input id="lotNo"></div>
   <div><label>Delivery Date</label><input type="date" id="deliveryDate"></div>
+
+  <!-- ✅ NEW FIELD -->
+  <div><label>Ordered Date</label><input type="date" id="orderedDate"></div>
+
   <div><label>Payment Terms</label><input id="paymentTerms"></div>
   <div><label>Notes</label><input id="notes"></div>
 </div>
@@ -241,6 +245,7 @@ function addItem(){
   let it=MASTER.items.find(x=>x.ItemID==itemSelect.value);
   let qty=+itemQty.value||0;
   let rate=+itemRate.value||it.Rate||0;
+
   ITEMS.push({
     ItemID:it.ItemID,
     ItemName:it.ItemName,
@@ -249,8 +254,12 @@ function addItem(){
     DIA:itemDIA.value,
     Qty:qty,
     Rate:rate,
-    Amount:qty*rate
+    Amount:qty*rate,
+
+    // ✅ NEW (PI-level, copied into item)
+    OrderedDate: orderedDate.value || ""
   });
+
   renderItems();
 }
 
@@ -285,6 +294,10 @@ function editItem(i){
   itemDIA.value=r.DIA;
   itemQty.value=r.Qty;
   itemRate.value=r.Rate;
+
+  // ✅ restore ordered date
+  orderedDate.value = r.OrderedDate || "";
+
   ITEMS.splice(i,1);
   renderItems();
 }
